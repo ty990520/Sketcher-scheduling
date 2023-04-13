@@ -35,8 +35,7 @@ public class RestControllerV2 implements RestCalendarController{
         List<ManagerDto> collect = allManager.stream()
                 .map(m1 -> new ManagerDto(m1.getCode(), m1.getId(), m1.getUsername(),
                         m1.getManagerHopeTimeList().stream()
-                        .map(m2 -> new ManagerHopeTimeDto(m2.getStart_time(), m2.getFinish_time()))
-                        .collect(Collectors.toList())))
+                        .map(m2 -> m2.getStart_time()) .collect(Collectors.toList())))
                 .collect(Collectors.toList());
         return new ReturnCountAndObject(collect.size(), collect);
     }
@@ -47,14 +46,7 @@ public class RestControllerV2 implements RestCalendarController{
         private Integer code;
         private String id;
         private String username;
-        private List<ManagerHopeTimeDto> managerHopeTimeList;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class ManagerHopeTimeDto {
-        private Integer start_time;
-        private Integer finish_time;
+        private List<Integer> start_time;
     }
 
 

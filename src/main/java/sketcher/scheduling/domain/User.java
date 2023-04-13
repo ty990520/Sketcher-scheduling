@@ -1,10 +1,11 @@
 package sketcher.scheduling.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
@@ -52,11 +53,9 @@ public class User implements UserDetails {
     @Column(name = "vacation_req_check")
     private Character vacationReqCheck;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ManagerHopeTime> managerHopeTimeList = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ManagerAssignSchedule> managerAssignScheduleList = new ArrayList<>();
 
