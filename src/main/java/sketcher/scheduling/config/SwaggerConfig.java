@@ -23,17 +23,16 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build();
-//                .apiInfo(apiInfo())
+                .build()
+                .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
-        String description = "Sketcher API Documentation";
+        String description = "스프린트 매니저 스케줄링 프로그램 API 문서";
         return new ApiInfoBuilder()
-                .title("Sketcher Swagger")
+                .title("Sketcher API document")
                 .description(description)
-                .version("1.0")
-                .contact(new Contact("Sketcher" , "https://dodokong.tistory.com/", "alsghks9700@naver.com"))
+                .version("2.0")
                 .build();
     }
 }

@@ -1,15 +1,21 @@
 package sketcher.scheduling.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import sketcher.scheduling.algorithm.AutoScheduling;
 import sketcher.scheduling.algorithm.ResultScheduling;
 import sketcher.scheduling.domain.ManagerHopeTime;
 import sketcher.scheduling.domain.User;
 import sketcher.scheduling.dto.EstimatedNumOfCardsPerHourDto;
 import sketcher.scheduling.dto.ManagerAssignScheduleDto;
+import sketcher.scheduling.dto.ManagerHopeTimeDto;
 import sketcher.scheduling.repository.EstimatedNumOfCardsPerHourRepository;
 import sketcher.scheduling.repository.ManagerHopeTimeRepository;
 import sketcher.scheduling.repository.PercentageOfManagerWeightsRepository;
@@ -24,11 +30,12 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @org.springframework.web.bind.annotation.RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
-public class RestController {
+@RequestMapping("/api/v2")
+public class RestControllerV2 {
     private final UserRepository userRepository;
     private final UserService userService;
     private final ManagerAssignScheduleService assignScheduleService;
@@ -39,12 +46,39 @@ public class RestController {
     private final PercentageOfManagerWeightsRepository percentageOfManagerWeightsRepository;
 
     @GetMapping(value = "/find_All_Manager")
-    public List<User> findAllManager() {
-        return userRepository.findAllManager();
+    public Result findAllManager() {
+        List<User> allManager = userRepository.findAllManager();
+
+        List<ManagerDto> collect = allManager.stream()
+                .map(m1 -> new ManagerDto(m1.getId(), m1.getUsername(),
+                        m1.getManagerHopeTimeList().stream()
+                        .map(m2 -> new ManagerHopeTimeDto(m2.getStart_time(), m2.getFinish_time()))
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+        return new Result(collect.size(), collect);
     }
-    @GetMapping(value = "/find_All_Manager_Hope_Time")
-    public List<ManagerHopeTime> findAllManagerHopeTime() {
-        return hopeTimeService.findAll();
+
+    @Data
+    @AllArgsConstructor
+    static class ManagerDto {
+        private String id;
+        private String username;
+        private List<ManagerHopeTimeDto> managerHopeTimeList;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ManagerHopeTimeDto {
+        private Integer start_time;
+        private Integer finish_time;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private int count;
+        private T data;
+        //object 타입으로 반환하기 위함 (배열타입으로 반환하면 유연성 떨어짐)
     }
 
     @RequestMapping(value = "/create_assign_schedule", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)

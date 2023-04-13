@@ -52,11 +52,11 @@ public class User implements UserDetails {
     @Column(name = "vacation_req_check")
     private Character vacationReqCheck;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ManagerHopeTime> managerHopeTimeList = new ArrayList<>();
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ManagerAssignSchedule> managerAssignScheduleList = new ArrayList<>();
 
