@@ -14,7 +14,6 @@ import sketcher.scheduling.service.PercentageOfManagerWeightsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -93,7 +92,7 @@ public class HomeController {
 
     @GetMapping(value = "/create_schedule")
     public String createSchedule() {
-        return "full-calendar/calendar_create";
+        return "full-calendar/calendar_createV2";
     }
 
 

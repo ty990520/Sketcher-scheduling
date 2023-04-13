@@ -4095,8 +4095,8 @@
         // create_table();
         days_click('mon');
         select_All_Manager();
-        fill_expected_needs();
-        setting_sell_selector();
+        // fill_expected_needs();
+        // setting_sell_selector();
 
     }
 
@@ -4177,12 +4177,14 @@
             type: "get",
             datatype: "json",
             success: function (data) {
-                $.each(data, function (index, item) { // 데이터 =item
-                    username_list.push(item.username);
-                    usercode_list.push(item.code);
-                    userid_list.push(item.id);
-                    usertemptime_list.push(0);
-                });
+                console.log(data);
+                for (let i = 0; i < data.count; i++) { // 배열 arr의 모든 요소의 인덱스(index)를 출력함.
+                    let row = Object.values(data.data[i]);
+                    usercode_list.push(row[0]);
+                    userid_list.push(row[1]);
+                    username_list.push(row[2]);
+                    usertemptime_list.push(0);  // 매니저수만큼 0으로 초기화
+                }
                 setting_manager_selector();
             }
             ,
@@ -4191,27 +4193,27 @@
             }
         });
 
-        $.ajax({
-            url: "/find_All_Manager_Hope_Time",
-            type: "get",
-            datatype: "json",
-            success: function (data) {
-                $.each(data, function (index, item) { // 데이터 =item
-                    if (item.user.code in userhopetime_list) {   //이미 존재하는 key면
-                        var hope_times = userhopetime_list[item.user.code];
-                        hope_times.push(item.start_time);
-                        userhopetime_list[item.user.code] = hope_times;
-                    } else {
-                        userhopetime_list[item.user.code] = [item.start_time];
-                    }
-                });
-                showhopetiems();
-            }
-            ,
-            error: function () {
-                alert('error');
-            }
-        });
+        // $.ajax({
+        //     url: "/find_All_Manager_Hope_Time",
+        //     type: "get",
+        //     datatype: "json",
+        //     success: function (data) {
+        //         $.each(data, function (index, item) { // 데이터 =item
+        //             if (item.user.code in userhopetime_list) {   //이미 존재하는 key면
+        //                 var hope_times = userhopetime_list[item.user.code];
+        //                 hope_times.push(item.start_time);
+        //                 userhopetime_list[item.user.code] = hope_times;
+        //             } else {
+        //                 userhopetime_list[item.user.code] = [item.start_time];
+        //             }
+        //         });
+        //         showhopetiems();
+        //     }
+        //     ,
+        //     error: function () {
+        //         alert('error');
+        //     }
+        // });
     }
 
     function showhopetiems() {
