@@ -1,5 +1,6 @@
 package sketcher.scheduling.controller;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,7 +28,7 @@ import java.util.*;
 
 @org.springframework.web.bind.annotation.RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@Api(tags = {"RestController 리팩토링 전"})
 public class RestController {
     private final UserRepository userRepository;
     private final UserService userService;
@@ -38,7 +39,6 @@ public class RestController {
     private final EstimatedNumOfCardsPerHourRepository estimatedNumOfCardsPerHourRepository;
     private final PercentageOfManagerWeightsRepository percentageOfManagerWeightsRepository;
 
-    @GetMapping(value = "/find_All_Manager")
     public List<User> findAllManager() {
         return userRepository.findAllManager();
     }
@@ -68,7 +68,7 @@ public class RestController {
             assignScheduleService.saveManagerAssignSchedule(dto);
         }
 
-        sendKakaoMessage();
+//        sendKakaoMessage();
 
         return param.size();
     }
@@ -155,21 +155,6 @@ public class RestController {
         hopeTimeList.add(hopetimes);
     }
 
-    public void sendKakaoMessage() throws IOException {
-//            String refresh_Token = kakaoService.getRefreshToken(code);
-        String refresh_Token = "uIYs7FKmV4Y-s5EAb8OjEpHvvLtZN3zDoD6p2i_HCilwUAAAAYIu4OjU";
-        String access_Token = kakaoService.refreshAccessToken(refresh_Token);
-        HashMap<String, Object> userInfo = kakaoService.getUserInfo(access_Token);
-        boolean isSendMessage = kakaoService.isSendMessage(access_Token);
-        HashMap<String, Object> friendsId = kakaoService.getFriendsList(access_Token);
-        boolean isSendMessageToFriends = kakaoService.isSendMessageToFriends(access_Token, friendsId);
-        // 친구에게 메시지 보내기는 월 전송 제한이 있음 -> 주석 처리
-
-//        session.setAttribute("refresh_Token", refresh_Token);
-//        session.setAttribute("access_Token", access_Token);
-
-    }
-
     @RequestMapping(value = "/update_est_cards", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     public int updateEstCards(@RequestBody List<Map<String, Object>> param) throws ParseException, IOException {
         for (Map<String, Object> stringObjectMap : param) {
@@ -184,4 +169,21 @@ public class RestController {
         }
         return param.size();
     }
+
+
+    /* 카카오톡 메시지 전송하기 만료
+    public void sendKakaoMessage() throws IOException {
+//            String refresh_Token = kakaoService.getRefreshToken(code);
+        String refresh_Token = "uIYs7FKmV4Y-s5EAb8OjEpHvvLtZN3zDoD6p2i_HCilwUAAAAYIu4OjU";
+        String access_Token = kakaoService.refreshAccessToken(refresh_Token);
+        HashMap<String, Object> userInfo = kakaoService.getUserInfo(access_Token);
+        boolean isSendMessage = kakaoService.isSendMessage(access_Token);
+        HashMap<String, Object> friendsId = kakaoService.getFriendsList(access_Token);
+        boolean isSendMessageToFriends = kakaoService.isSendMessageToFriends(access_Token, friendsId);
+        // 친구에게 메시지 보내기는 월 전송 제한이 있음 -> 주석 처리
+
+//        session.setAttribute("refresh_Token", refresh_Token);
+//        session.setAttribute("access_Token", access_Token);
+
+    }*/
 }
