@@ -1,13 +1,8 @@
 package sketcher.scheduling.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
-import sketcher.scheduling.domain.ManagerHopeTime;
 import sketcher.scheduling.domain.User;
 
 import java.util.List;
@@ -20,7 +15,7 @@ public interface UserRepository extends JpaRepository<User , Integer> {
 
     List<User> findAll();
 
-    @Query("select u from User u where u.authRole = 'MANAGER'")
+    @Query("select u from User u join fetch u.managerHopeTimeList where u.authRole = 'MANAGER'")
     List<User> findAllManager();
 
 	@Query("select u from User u where u.id = :userid")
