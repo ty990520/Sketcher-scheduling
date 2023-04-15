@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +51,12 @@ public class ManagerAssignScheduleService {
     public Integer saveManagerAssignSchedule(ManagerAssignScheduleDto managerAssignScheduleDto) throws NoSuchElementException {
         managerAssignScheduleDto.setUpdateReq(null);
         return managerAssignScheduleRepository.save(managerAssignScheduleDto.toEntity()).getId();
+    }
+
+    @Transactional
+    public void saveAllManagerAssignSchedule(List<ManagerAssignScheduleDto> assignSchedules) throws NoSuchElementException {
+        List<ManagerAssignSchedule> collect = assignSchedules.stream().map(ManagerAssignScheduleDto::toEntity).collect(Collectors.toList());
+        managerAssignScheduleRepository.saveAll(collect);
     }
 
     public List<ManagerAssignSchedule> findByUser(User user) {

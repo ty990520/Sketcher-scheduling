@@ -4443,7 +4443,7 @@
             }
 
             var jsondata = JSON.stringify(jsonList);
-
+            console.log(jsondata);
 
             $.ajax({
                 type: 'post'
@@ -4451,7 +4451,6 @@
                 , data: jsondata
                 , url: '/current_status_info'
                 , success: function (data) {
-                    console.log(data);
                     document.getElementById("loading").style.display = "none";
                     var pointerList = [];
                     for (let i = 0; i < 24; i++) {  //포인터 배열 초기화
@@ -4627,7 +4626,7 @@
             }
             if (count_json != 0) {
                 var jsondata = JSON.stringify(jsonList);
-
+                console.log(jsondata);
                 $.ajax({
                     type: 'post'
                     , contentType: 'application/json'
