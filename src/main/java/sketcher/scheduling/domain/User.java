@@ -56,7 +56,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<ManagerHopeTime> managerHopeTimeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",orphanRemoval = true)
     private List<ManagerAssignSchedule> managerAssignScheduleList = new ArrayList<>();
 
     protected User() {

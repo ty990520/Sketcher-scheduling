@@ -6,16 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sketcher.scheduling.domain.ManagerAssignSchedule;
 import sketcher.scheduling.domain.User;
-import sketcher.scheduling.dto.UserDto;
+import sketcher.scheduling.repository.assignSchedule.buikInsert.AssignScheduleBulkInsertRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ManagerAssignScheduleRepository extends JpaRepository<ManagerAssignSchedule, Integer> {
+public interface ManagerAssignScheduleRepository extends JpaRepository<ManagerAssignSchedule, Integer> , AssignScheduleBulkInsertRepository {
 
 
 //    List<ManagerAssignSchedule> AssignScheduleFindAll();
@@ -35,4 +32,6 @@ public interface ManagerAssignScheduleRepository extends JpaRepository<ManagerAs
     @Modifying
     @Query("update ManagerAssignSchedule a set a.user=null where a.user=:user")
     int bulkUserSetNull(@Param("user") User user);
+
+
 }

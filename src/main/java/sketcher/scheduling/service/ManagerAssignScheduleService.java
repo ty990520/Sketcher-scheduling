@@ -56,8 +56,9 @@ public class ManagerAssignScheduleService {
     @Transactional
     public void saveAllManagerAssignSchedule(List<ManagerAssignScheduleDto> assignSchedules) throws NoSuchElementException {
         List<ManagerAssignSchedule> collect = assignSchedules.stream().map(ManagerAssignScheduleDto::toEntity).collect(Collectors.toList());
-        managerAssignScheduleRepository.saveAll(collect);
+        managerAssignScheduleRepository.assignScheduleBulkInsertWithBatchSize100(collect);
     }
+
 
     public List<ManagerAssignSchedule> findByUser(User user) {
         return user.getManagerAssignScheduleList();
