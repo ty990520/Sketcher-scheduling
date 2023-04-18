@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toList;
 
 @org.springframework.web.bind.annotation.RestController
 @RequiredArgsConstructor
-@Api(tags = {"RestController 리팩토링 버전"})
+@Api(tags = {"스케줄 배정 관련 추가 보완 Rest API"})
 public class RestControllerV2{
     private final UserService userService;
     private final UserRepository userRepository;
@@ -47,35 +47,48 @@ public class RestControllerV2{
     @ApiOperation(value = "saveAll을 사용한 스케줄 저장")
     @RequestMapping(value = "/create_assign_schedule", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     public int createAssignScheduleV2(@RequestBody List<Map<String, Object>> param) {
-        System.out.println("@@@@@@@@@@@@@@@");
-        assignScheduleService.saveAllManagerAssignSchedule(parsingDtoList(param));
-        System.out.println("@@@@@@@@@@@@@@@");
+        assignScheduleService.saveAllManagerAssignSchedule(makeDtoList(param));
         return param.size();
     }
 
 
-    private List<ManagerAssignScheduleDto> parsingDtoList(List<Map<String, Object>> param) {
+    private List<ManagerAssignScheduleDto> makeDtoList(List<Map<String, Object>> param) {
         List<ManagerAssignScheduleDto> dtoList = new ArrayList<>();
 
         for (Map<String, Object> stringObjectMap : param) {
-            String startDateString = (String) stringObjectMap.get("startTime"); //2022-07-24T22:00:00.000Z
-            String endDateString = (String) stringObjectMap.get("endTime"); //2022-07-24T22:00:00.000Z
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA);
-
-            LocalDateTime startDateUTC = LocalDateTime.parse(startDateString, dateTimeFormatter);
-            LocalDateTime endDateUTC = LocalDateTime.parse(endDateString, dateTimeFormatter);
-
-            LocalDateTime startDate = startDateUTC.plusHours(9);
-            LocalDateTime endDate = endDateUTC.plusHours(9);
-
-            ManagerAssignScheduleDto dto = ManagerAssignScheduleDto.builder()
-                    .user(userService.findByCode((Integer) stringObjectMap.get("usercode")).get())
-                    .scheduleDateTimeStart(startDate)
-                    .scheduleDateTimeEnd(endDate)
-                    .build();
+            TimeData result = getParsingTimeData(stringObjectMap);
+            ManagerAssignScheduleDto dto = makeAssignScheduleDto(stringObjectMap, result.startDate, result.endDate);
             dtoList.add(dto);
         }
         return dtoList;
+    }
+
+    private static TimeData getParsingTimeData(Map<String, Object> stringObjectMap) {
+        String startDateString = (String) stringObjectMap.get("startTime"); //2022-07-24T22:00:00.000Z
+        String endDateString = (String) stringObjectMap.get("endTime"); //2022-07-24T22:00:00.000Z
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA);
+        LocalDateTime startDate = LocalDateTime.parse(startDateString, dateTimeFormatter).plusHours(9);
+        LocalDateTime endDate = LocalDateTime.parse(endDateString, dateTimeFormatter).plusHours(9);
+        TimeData result = new TimeData(startDate, endDate);
+        return result;
+    }
+
+    private static class TimeData {
+        public final LocalDateTime startDate;
+        public final LocalDateTime endDate;
+
+        public TimeData(LocalDateTime startDate, LocalDateTime endDate) {
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
+    }
+
+    private ManagerAssignScheduleDto makeAssignScheduleDto(Map<String, Object> stringObjectMap, LocalDateTime startDate, LocalDateTime endDate) {
+        return ManagerAssignScheduleDto.builder()
+                .user(userService.findByCode((Integer) stringObjectMap.get("usercode")).get())
+                .scheduleDateTimeStart(startDate)
+                .scheduleDateTimeEnd(endDate)
+                .build();
     }
 
 
