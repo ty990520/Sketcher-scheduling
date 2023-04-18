@@ -40,14 +40,14 @@ public class AssignScheduleRepositoryTest {
 
         User user = userRepository.findById("userlhw").get();
 
-        LocalDateTime date1 = LocalDateTime.of(2022,3,6,2,00);
-        LocalDateTime date2 = LocalDateTime.of(2022,3,6,4,00);
-        LocalDateTime date3 = LocalDateTime.of(2022,3,7,6,00);
-        LocalDateTime date4 = LocalDateTime.of(2022,3,7,9,00);
-        LocalDateTime date5 = LocalDateTime.of(2022,3,13,13,00);
-        LocalDateTime date6 = LocalDateTime.of(2022,3,13,16,00);
-        LocalDateTime date7 = LocalDateTime.of(2022,3,14,20,00);
-        LocalDateTime date8 = LocalDateTime.of(2022,3,14,22,00);
+        LocalDateTime date1 = LocalDateTime.of(2022, 3, 6, 2, 00);
+        LocalDateTime date2 = LocalDateTime.of(2022, 3, 6, 4, 00);
+        LocalDateTime date3 = LocalDateTime.of(2022, 3, 7, 6, 00);
+        LocalDateTime date4 = LocalDateTime.of(2022, 3, 7, 9, 00);
+        LocalDateTime date5 = LocalDateTime.of(2022, 3, 13, 13, 00);
+        LocalDateTime date6 = LocalDateTime.of(2022, 3, 13, 16, 00);
+        LocalDateTime date7 = LocalDateTime.of(2022, 3, 14, 20, 00);
+        LocalDateTime date8 = LocalDateTime.of(2022, 3, 14, 22, 00);
 
         ManagerAssignScheduleDto assignSchedule = ManagerAssignScheduleDto.builder()
                 .user(user)
@@ -83,6 +83,6 @@ public class AssignScheduleRepositoryTest {
         managerAssignScheduleRepository.assignScheduleBulkInsertWithBatchSize100(entities);
 
         //then
-
+        // 쿼리가 한 번 발생해야 한다.
     }
 }

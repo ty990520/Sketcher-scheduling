@@ -40,50 +40,6 @@ public class ManagerAssignScheduleServiceTest {
     @Autowired
     ManagerAssignScheduleRepository managerAssignScheduleRepository;
 
-//    @Test
-//    @Transactional
-//    @Commit
-//    public void 매니저_배정_스케줄_생성 (){
-//    //given
-//        Date date = new Date();
-//
-//        UserDto user = UserDto.builder()
-//                .id("min")
-//                .authRole("user")
-//                .password("1234")
-//                .username("정민환")
-//                .userTel("1234-5678")
-//                .build();
-//
-//        userService.saveUser(user);
-//
-//        User userA = userRepository.findById(user.getId()).get();
-//
-//        ScheduleDto schedule = ScheduleDto.builder()
-//                .scheduleDate(date)
-//                .scheduleTime(3)
-//                .workforce(100)
-//                .expected_card_cnt(100)
-//                .build();
-//
-//        Integer id = scheduleService.saveSchedule(schedule);
-//        Schedule scheduleA = scheduleRepository.findById(id).get();
-//
-//        ManagerAssignScheduleDto managerAssignSchedule = ManagerAssignScheduleDto.builder()
-//                .schedule_delete_req_check('N')
-//                .user(userA)
-//                .schedule(scheduleA)
-//                .build();
-//
-//        managerAssignScheduleService.saveManagerAssignSchedule(managerAssignSchedule);
-//
-//        //when
-//        List<ManagerAssignSchedule> userA_Schedule = managerAssignScheduleRepository.findByUser(userA);
-//    //then
-//        Assertions.assertEquals(userA_Schedule.get(0).getUser().getId(), userA.getId());
-//        Assertions.assertEquals(userA_Schedule.get(0).getSchedule().getId(), scheduleA.getId());
-//    }
-
     @Test
     @Transactional
     @Commit
@@ -99,14 +55,14 @@ public class ManagerAssignScheduleServiceTest {
         String userId = userService.saveUser(userDto);
         User user = userRepository.findById(userId).get();
 
-        LocalDateTime date1 = LocalDateTime.of(2022,3,6,2,00);
-        LocalDateTime date2 = LocalDateTime.of(2022,3,6,4,00);
-        LocalDateTime date3 = LocalDateTime.of(2022,3,7,6,00);
-        LocalDateTime date4 = LocalDateTime.of(2022,3,7,9,00);
-        LocalDateTime date5 = LocalDateTime.of(2022,3,13,13,00);
-        LocalDateTime date6 = LocalDateTime.of(2022,3,13,16,00);
-        LocalDateTime date7 = LocalDateTime.of(2022,3,14,20,00);
-        LocalDateTime date8 = LocalDateTime.of(2022,3,14,22,00);
+        LocalDateTime date1 = LocalDateTime.of(2022, 3, 6, 2, 00);
+        LocalDateTime date2 = LocalDateTime.of(2022, 3, 6, 4, 00);
+        LocalDateTime date3 = LocalDateTime.of(2022, 3, 7, 6, 00);
+        LocalDateTime date4 = LocalDateTime.of(2022, 3, 7, 9, 00);
+        LocalDateTime date5 = LocalDateTime.of(2022, 3, 13, 13, 00);
+        LocalDateTime date6 = LocalDateTime.of(2022, 3, 13, 16, 00);
+        LocalDateTime date7 = LocalDateTime.of(2022, 3, 14, 20, 00);
+        LocalDateTime date8 = LocalDateTime.of(2022, 3, 14, 22, 00);
 
         ManagerAssignScheduleDto assignSchedule = ManagerAssignScheduleDto.builder()
                 .user(user)
@@ -132,12 +88,12 @@ public class ManagerAssignScheduleServiceTest {
                 .scheduleDateTimeEnd(date8)
                 .build();
 
-        Integer assignedId1 = managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule);
-        Integer assignedId2 = managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule2);
-        Integer assignedId3 = managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule3);
-        Integer assignedId4 = managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule4);
+        managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule);
+        managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule2);
+        managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule3);
+        managerAssignScheduleService.saveManagerAssignSchedule(assignSchedule4);
 
-                //when
+        //when
         List<ManagerAssignSchedule> schedules = managerAssignScheduleService.findByUserId(userId);
 
         //then
